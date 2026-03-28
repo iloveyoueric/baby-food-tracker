@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="新生兒過敏食物紀錄罐 - 可愛像素風" />
+
+  <title>寶寶食譜紀錄罐</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            macaronPink: '#FFB6C1',
+            macaronGreen: '#98FB98',
+            macaronBlue: '#B0E0E6',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap');
+
+    canvas,
+    img {
+      image-rendering: pixelated;
+      image-rendering: -moz-pixelated;
+      image-rendering: crisp-edges;
+    }
+
+    body {
+      /* 使用可愛的字體模擬像素感，若無此字體則回退至等寬字體 */
+      font-family: 'ZCOOL KuaiLe', 'Courier New', Courier, monospace;
+      background-color: #FFFDF5;
+    }
+  </style>
+</head>
+
+<body>
+  <noscript>你需要啟用 JavaScript 才能運行此應用程式。</noscript>
+  <div id="root"></div>
+</body>
+
+</html>
