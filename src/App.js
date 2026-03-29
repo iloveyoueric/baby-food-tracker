@@ -1,3 +1,5 @@
+// src/App.js 完整修正版
+
 import React, { useState, useEffect } from 'react';
 import { db } from './firebase';
 import { ref, onValue, set } from "firebase/database";
@@ -5,8 +7,6 @@ import { INITIAL_FOODS } from './FoodData';
 import HomePage from './components/HomePage';
 import RecordPage from './components/RecordPage';
 import StatsPage from './components/StatsPage';
-
-// 保持您原本的圖示與音效
 import { Baby, House, FilePenLine, ChartColumnBig } from 'lucide-react';
 import { playPixelSound } from './utils/audio';
 
@@ -21,28 +21,41 @@ export default function App() {
       const data = snapshot.val();
 
       if (data && Array.isArray(data)) {
-        // --- 核心修正：自動同步 Firebase 與 FoodData 的定義 ---
+        let needsUpdate = false;
 
-        // 1. 過濾掉想要刪除的食材：母乳、配方奶
-        let updatedData = data.filter(f => f.name !== '母乳' && f.name !== '配方奶');
+        // --- 核心修正：強制同步圖片路徑與最新定義 ---
+        const updatedData = data.map(dbFood => {
+          // 找尋 FoodData.js 中對應的最新定義
+          const latestDef = INITIAL_FOODS.find(f => f.id === dbFood.id);
 
-        // 2. 檢查是否需要新增「白麵」
-        const hasNoodles = updatedData.some(f => f.name === '白麵');
+          if (latestDef) {
+            // 檢查圖片路徑是否與最新的 FoodData 不符
+            if (dbFood.image !== latestDef.image) {
+              needsUpdate = true;
+              return { ...dbFood, image: latestDef.image };
+            }
+          }
+          return dbFood;
+        });
+
+        // 檢查是否有需要刪除的奶類或新增的白麵 (延續之前的邏輯)
+        let finalData = updatedData.filter(f => f.name !== '母乳' && f.name !== '配方奶');
+        const hasNoodles = finalData.some(f => f.name === '白麵');
         if (!hasNoodles) {
           const noodleObj = INITIAL_FOODS.find(f => f.name === '白麵');
           if (noodleObj) {
-            updatedData.push(noodleObj);
+            finalData.push(noodleObj);
+            needsUpdate = true;
           }
         }
 
-        // 3. 如果資料有變動（例如刪了奶或加了麵），寫回 Firebase
-        if (updatedData.length !== data.length) {
-          set(foodRef, updatedData);
+        if (needsUpdate || finalData.length !== data.length) {
+          console.log("偵測到配置變更，正在同步 Firebase 資料庫...");
+          set(foodRef, finalData);
         }
 
-        setFoods(updatedData);
+        setFoods(finalData);
       } else {
-        // 如果資料庫完全沒東西，初始化
         set(foodRef, INITIAL_FOODS);
       }
       setLoading(false);
@@ -70,41 +83,22 @@ export default function App() {
 
   return (
     <div className="flex min-h-screen bg-[#FFFDF5] font-mono">
-      {/* 左側導覽列 - 維持您的風格 */}
       <nav className="w-28 border-r-8 border-slate-800 bg-white flex flex-col items-center py-8 gap-6 sticky top-0 h-screen">
-
         <div className="mb-4 p-2 bg-slate-800 text-white border-4 border-slate-800 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)]">
           <Baby size={32} strokeWidth={2.5} />
         </div>
-
         <div className="flex flex-col gap-4">
-          <button
-            onClick={() => { playPixelSound.click(); setActivePage('home'); }}
-            className={navBtnClass('home')}
-          >
-            <House size={28} />
-            <span className="text-[10px] font-bold">預覽</span>
+          <button onClick={() => { playPixelSound.click(); setActivePage('home'); }} className={navBtnClass('home')}>
+            <House size={28} /><span className="text-[10px] font-bold">預覽</span>
           </button>
-
-          <button
-            onClick={() => { playPixelSound.click(); setActivePage('record'); }}
-            className={navBtnClass('record')}
-          >
-            <FilePenLine size={28} />
-            <span className="text-[10px] font-bold">紀錄</span>
+          <button onClick={() => { playPixelSound.click(); setActivePage('record'); }} className={navBtnClass('record')}>
+            <FilePenLine size={28} /><span className="text-[10px] font-bold">紀錄</span>
           </button>
-
-          <button
-            onClick={() => { playPixelSound.click(); setActivePage('stats'); }}
-            className={navBtnClass('stats')}
-          >
-            <ChartColumnBig size={28} />
-            <span className="text-[10px] font-bold">數據</span>
+          <button onClick={() => { playPixelSound.click(); setActivePage('stats'); }} className={navBtnClass('stats')}>
+            <ChartColumnBig size={28} /><span className="text-[10px] font-bold">數據</span>
           </button>
         </div>
       </nav>
-
-      {/* 右側內容區 */}
       <main className="flex-1 p-8 overflow-y-auto">
         {activePage === 'home' && <HomePage foods={foods} setFoods={updateFoods} />}
         {activePage === 'record' && <RecordPage foods={foods} setFoods={updateFoods} />}
