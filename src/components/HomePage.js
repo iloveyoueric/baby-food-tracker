@@ -118,7 +118,6 @@ export default function HomePage({ foods, setFoods }) {
         setIsAddModalOpen(false);
     };
 
-    // --- 區域過濾與排序邏輯 ---
     const renderArea = (id, title, bgColor, textColor, icon) => {
         let sectionFoods = filteredFoods.filter(f => {
             if (id === 'safe') return f.status === 'safe';
@@ -129,13 +128,10 @@ export default function HomePage({ foods, setFoods }) {
             return false;
         });
 
-        // 核心修改：如果是「待嘗試」區域，依照類別進行排序
         if (id === 'candidate') {
             sectionFoods = [...sectionFoods].sort((a, b) => {
-                // 先依照類別排序
                 if (a.category < b.category) return -1;
                 if (a.category > b.category) return 1;
-                // 同類別時，依照名稱排序
                 return a.name.localeCompare(b.name, 'zh-Hant');
             });
         }
@@ -207,7 +203,11 @@ export default function HomePage({ foods, setFoods }) {
                         <button onClick={() => setSelectedFoodForModal(null)} className="absolute -top-4 -right-4 bg-red-500 border-4 border-slate-800 p-1 text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-red-400 active:translate-y-1"><X /></button>
                         <div className="flex justify-between items-start mb-6">
                             <div className={`p-4 border-4 border-slate-800 flex items-center gap-4 ${CATEGORY_COLORS[selectedFoodForModal.category]}`}>
-                                {selectedFoodForModal.image ? <img src={selectedFoodForModal.image} className="w-12 h-12 object-contain" /> : <span className="text-3xl">🍱</span>}
+                                {selectedFoodForModal.image ? (
+                                    <img src={selectedFoodForModal.image} alt={selectedFoodForModal.name} className="w-12 h-12 object-contain" />
+                                ) : (
+                                    <span className="text-3xl">🍱</span>
+                                )}
                                 <div>
                                     <h3 className="text-2xl font-black">{selectedFoodForModal.name}</h3>
                                     <p className="font-bold text-[10px] mt-1 italic uppercase opacity-60 bg-black/10 px-2 inline-block">{selectedFoodForModal.category}</p>
