@@ -58,7 +58,7 @@ export default function StatsPage({ foods }) {
                 <p className="text-slate-500 font-bold mt-2 italic">追蹤寶寶每一口像素級的成長</p>
             </header>
 
-            {/* 切換按鈕：採用看板同款陰影與邊框 */}
+            {/* 切換按鈕 */}
             <div className="flex justify-center mb-10">
                 <div className="flex border-4 border-slate-800 bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
                     <button
@@ -76,7 +76,7 @@ export default function StatsPage({ foods }) {
                 </div>
             </div>
 
-            {/* --- 模式 1: 食材統計 (強化配色) --- */}
+            {/* --- 模式 1: 食材統計 (已移除進度條) --- */}
             {viewMode === 'food' && (
                 <div className="space-y-4">
                     {eatenFoods.length === 0 ? (
@@ -90,8 +90,8 @@ export default function StatsPage({ foods }) {
                                     onClick={() => toggleExpand(food.id)}
                                     className={`p-4 flex flex-col sm:flex-row items-center gap-4 cursor-pointer hover:brightness-95 transition-all ${CATEGORY_COLORS[food.category] || 'bg-white'}`}
                                 >
-                                    {/* 食材圖示區 */}
-                                    <div className="w-16 h-16 bg-white/80 border-4 border-slate-800 flex items-center justify-center shadow-[3px_3px_0px_0px_rgba(0,0,0,0.1)]">
+                                    {/* 1. 食材圖片 */}
+                                    <div className="w-16 h-16 bg-white/80 border-4 border-slate-800 flex items-center justify-center shadow-[3px_3px_0px_0px_rgba(0,0,0,0.1)] shrink-0">
                                         {food.image ? (
                                             <img src={food.image} alt={food.name} className="w-10 h-10 object-contain" style={{ imageRendering: 'pixelated' }} />
                                         ) : (
@@ -99,30 +99,32 @@ export default function StatsPage({ foods }) {
                                         )}
                                     </div>
 
-                                    {/* 數據進度條：模擬 8-bit 血條感 */}
-                                    <div className="flex-1 w-full space-y-1">
-                                        <div className="flex justify-between items-end">
-                                            <span className="text-xl font-black text-slate-800">{food.name}</span>
-                                            <span className="text-xs font-black bg-slate-800 text-white px-2 py-0.5 mb-1">{food.totalMl} ml</span>
-                                        </div>
-                                        <div className="h-4 border-4 border-slate-800 bg-white/50 relative overflow-hidden">
-                                            <div
-                                                className="h-full bg-slate-800 transition-all duration-500"
-                                                style={{ width: `${Math.min((food.totalMl / 500) * 100, 100)}%` }}
-                                            ></div>
-                                        </div>
+                                    {/* 2. 名稱與過敏標記 */}
+                                    <div className="flex-1 flex items-center gap-3">
+                                        <span className="text-xl font-black text-slate-800">{food.name}</span>
+                                        {food.status === 'allergy' && (
+                                            <div className="flex items-center gap-1 bg-red-600 text-white px-2 py-0.5 border-2 border-slate-900 text-[10px] font-black animate-pulse">
+                                                <AlertCircle size={12} /> 過敏
+                                            </div>
+                                        )}
                                     </div>
 
-                                    {/* 次數標籤 */}
-                                    <div className="flex items-center gap-2">
-                                        <span className="bg-white border-4 border-slate-800 px-3 py-1 text-xs font-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex items-center gap-1">
+                                    {/* 3. 數據統計 (總量與 Hits) */}
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex flex-col items-end">
+                                            <span className="text-[10px] font-black text-slate-500 uppercase leading-none">Total</span>
+                                            <span className="text-lg font-black text-slate-800">{food.totalMl} ml</span>
+                                        </div>
+
+                                        <div className="h-10 w-1 bg-slate-800/10 hidden sm:block"></div>
+
+                                        <button className="bg-white border-4 border-slate-800 px-3 py-1 text-xs font-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex items-center gap-1 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all">
                                             {food.logs.length} Hits {expandedFoodId === food.id ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-                                        </span>
-                                        {food.status === 'allergy' && <AlertCircle className="text-red-600 animate-bounce" size={24} />}
+                                        </button>
                                     </div>
                                 </div>
 
-                                {/* 展開的歷史紀錄清單 */}
+                                {/* 展開的歷史紀錄清單 (維持原樣) */}
                                 {expandedFoodId === food.id && (
                                     <div className="bg-slate-50 border-t-4 border-slate-800 p-4 space-y-2 animate-in slide-in-from-top-2 duration-200">
                                         {food.logs.map((log, index) => (
@@ -149,7 +151,7 @@ export default function StatsPage({ foods }) {
                 </div>
             )}
 
-            {/* --- 模式 2: 每日紀錄 (強化類別色彩) --- */}
+            {/* --- 模式 2: 每日紀錄 (完全維持原樣) --- */}
             {viewMode === 'date' && (
                 <div className="space-y-6">
                     {dailyLogs.length === 0 ? (

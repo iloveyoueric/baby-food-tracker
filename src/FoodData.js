@@ -1,4 +1,4 @@
-// src/FoodData.js
+// src/FoodData.js 完整修正版本
 
 import imgStap from './assets/stap_rice.png';
 import imgMeat from './assets/meat_pork.png';
@@ -10,12 +10,14 @@ import imgDrink from './assets/drink_milk.png';
 import imgNut from './assets/nut_peanut.png';
 
 export const INITIAL_FOODS = [
-    // 主食 (st01 - st05) - 新增類別
+    // 主食 (st01 - st06)
     { "id": "st01", "name": "白米", "category": "主食", "status": "candidate", "logs": [], "image": imgStap },
     { "id": "st02", "name": "蕎麥", "category": "主食", "status": "candidate", "logs": [], "image": imgStap },
     { "id": "st03", "name": "糙米", "category": "主食", "status": "candidate", "logs": [], "image": imgStap },
     { "id": "st04", "name": "小米", "category": "主食", "status": "candidate", "logs": [], "image": imgStap },
     { "id": "st05", "name": "燕麥", "category": "主食", "status": "candidate", "logs": [], "image": imgStap },
+    // 修正：新增白麵
+    { "id": "st06", "name": "白麵", "category": "主食", "status": "candidate", "logs": [], "image": imgStap },
 
     // 肉類 (m01 - m10)
     { "id": "m01", "name": "豬肉", "category": "肉類", "status": "candidate", "logs": [], "image": imgMeat },
@@ -115,9 +117,8 @@ export const INITIAL_FOODS = [
     { "id": "s09", "name": "干貝", "category": "海鮮", "status": "candidate", "logs": [], "image": imgSeafood },
     { "id": "s10", "name": "吻仔魚", "category": "海鮮", "status": "candidate", "logs": [], "image": imgSeafood },
 
-    // 飲品與乳製品 (d01 - d05)
-    { "id": "d01", "name": "配方奶", "category": "飲品", "status": "candidate", "logs": [], "image": imgDrink },
-    { "id": "d02", "name": "母乳", "category": "飲品", "status": "candidate", "logs": [], "image": imgDrink },
+    // 飲品與乳製品 (d03 - d05)
+    // 修正：已移除母乳與配方奶
     { "id": "d03", "name": "全脂鮮乳", "category": "飲品", "status": "candidate", "logs": [], "image": imgDrink },
     { "id": "d04", "name": "無糖豆漿", "category": "飲品", "status": "candidate", "logs": [], "image": imgDrink },
     { "id": "d05", "name": "燕麥奶", "category": "飲品", "status": "candidate", "logs": [], "image": imgDrink },
@@ -133,7 +134,7 @@ export const INITIAL_FOODS = [
 ];
 
 export const CATEGORY_COLORS = {
-    '主食': 'bg-[#F0E39B]', // Wheat (馬卡龍小麥色)
+    '主食': 'bg-[#F0E39B]',
     '肉類': 'bg-[#FFB6C1]',
     '蔬菜': 'bg-[#98FB98]',
     '水果': 'bg-[#FFFFE0]',
