@@ -5,12 +5,12 @@ import { foodImages } from './utils/importAll';
 export const INITIAL_FOODS = [
     // 主食 (st01 - st06)
     { "id": "st01", "name": "白米", "category": "主食", "status": "candidate", "logs": [], "image": foodImages['stap_rice'] },
-    { "id": "st02", "name": "蕎麥", "category": "主食", "status": "candidate", "logs": [], "image": foodImages['stap_rice'] },
-    { "id": "st03", "name": "糙米", "category": "主食", "status": "candidate", "logs": [], "image": foodImages['stap_rice'] },
-    { "id": "st04", "name": "小米", "category": "主食", "status": "candidate", "logs": [], "image": foodImages['stap_rice'] },
-    { "id": "st05", "name": "燕麥", "category": "主食", "status": "candidate", "logs": [], "image": foodImages['stap_rice'] },
+    { "id": "st02", "name": "蕎麥", "category": "主食", "status": "candidate", "logs": [], "image": foodImages['stap_brownbuckwheat'] },
+    { "id": "st03", "name": "糙米", "category": "主食", "status": "candidate", "logs": [], "image": foodImages['stap_brownrice'] },
+    { "id": "st04", "name": "小米", "category": "主食", "status": "candidate", "logs": [], "image": foodImages['stap_foxtailmillet'] },
+    { "id": "st05", "name": "燕麥", "category": "主食", "status": "candidate", "logs": [], "image": foodImages['stap_oat'] },
     // 修正：新增白麵
-    { "id": "st06", "name": "白麵", "category": "主食", "status": "candidate", "logs": [], "image": foodImages['stap_rice'] },
+    { "id": "st06", "name": "白麵", "category": "主食", "status": "candidate", "logs": [], "image": foodImages['stap_whitenoddles'] },
 
     // 肉類 (m01 - m10)
     { "id": "m01", "name": "豬肉", "category": "肉類", "status": "candidate", "logs": [], "image": foodImages['meat_pork'] },
@@ -33,7 +33,7 @@ export const INITIAL_FOODS = [
     { "id": "v06", "name": "地瓜葉", "category": "蔬菜", "status": "candidate", "logs": [], "image": foodImages['veg_cabbage'] },
     { "id": "v07", "name": "小松菜", "category": "蔬菜", "status": "candidate", "logs": [], "image": foodImages['veg_cabbage'] },
     { "id": "v08", "name": "莧菜", "category": "蔬菜", "status": "candidate", "logs": [], "image": foodImages['veg_cabbage'] },
-    { "id": "v09", "name": "小白菜", "category": "蔬菜", "status": "candidate", "logs": [], "image": foodImages['veg_cabbage'] },
+    { "id": "v09", "name": "小白菜", "category": "蔬菜", "status": "candidate", "logs": [], "image": foodImages['veg_bokchoy'] },
     { "id": "v10", "name": "紅蘿蔔", "category": "蔬菜", "status": "candidate", "logs": [], "image": foodImages['veg_carrot'] },
     { "id": "v11", "name": "白蘿蔔", "category": "蔬菜", "status": "candidate", "logs": [], "image": foodImages['veg_cabbage'] },
     { "id": "v12", "name": "南瓜", "category": "蔬菜", "status": "candidate", "logs": [], "image": foodImages['veg_pumpkin'] },
@@ -54,7 +54,7 @@ export const INITIAL_FOODS = [
     { "id": "v27", "name": "甜椒", "category": "蔬菜", "status": "candidate", "logs": [], "image": foodImages['veg_cabbage'] },
     { "id": "v28", "name": "秋葵", "category": "蔬菜", "status": "candidate", "logs": [], "image": foodImages['veg_cabbage'] },
     { "id": "v29", "name": "蘆筍", "category": "蔬菜", "status": "candidate", "logs": [], "image": foodImages['veg_cabbage'] },
-    { "id": "v30", "name": "香菇", "category": "蔬菜", "status": "candidate", "logs": [], "image": foodImages['veg_cabbage'] },
+    { "id": "v30", "name": "香菇", "category": "蔬菜", "status": "candidate", "logs": [], "image": foodImages['veg_shiitakemushroom'] },
     { "id": "v31", "name": "金針菇", "category": "蔬菜", "status": "candidate", "logs": [], "image": foodImages['veg_cabbage'] },
     { "id": "v32", "name": "杏鮑菇", "category": "蔬菜", "status": "candidate", "logs": [], "image": foodImages['veg_cabbage'] },
     { "id": "v33", "name": "黑木耳", "category": "蔬菜", "status": "candidate", "logs": [], "image": foodImages['veg_cabbage'] },
@@ -108,7 +108,7 @@ export const INITIAL_FOODS = [
     { "id": "s07", "name": "蝦子", "category": "海鮮", "status": "candidate", "logs": [], "image": foodImages['seafood_fish'] },
     { "id": "s08", "name": "蛤蜊", "category": "海鮮", "status": "candidate", "logs": [], "image": foodImages['seafood_fish'] },
     { "id": "s09", "name": "干貝", "category": "海鮮", "status": "candidate", "logs": [], "image": foodImages['seafood_fish'] },
-    { "id": "s10", "name": "吻仔魚", "category": "海鮮", "status": "candidate", "logs": [], "image": foodImages['seafood_fish'] },
+    { "id": "s10", "name": "章魚", "category": "海鮮", "status": "candidate", "logs": [], "image": foodImages['seafood_fish'] },
 
     // 飲品與乳製品 (d03 - d05)
     // 修正：已移除母乳與配方奶

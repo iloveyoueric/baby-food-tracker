@@ -23,39 +23,50 @@ export default function App() {
       if (data && Array.isArray(data)) {
         let needsUpdate = false;
 
-        // --- 核心修正：強制同步圖片路徑與最新定義 ---
+        // --- 核心修正：強制同步「名稱」與「圖片路徑」與最新定義 ---
         const updatedData = data.map(dbFood => {
-          // 找尋 FoodData.js 中對應的最新定義
+          // 找尋 FoodData.js 中對應 ID 的最新定義 (例如 s10 會找到章魚)
           const latestDef = INITIAL_FOODS.find(f => f.id === dbFood.id);
 
           if (latestDef) {
-            // 檢查圖片路徑是否與最新的 FoodData 不符
-            if (dbFood.image !== latestDef.image) {
+            // 檢查名稱或圖片是否與最新定義不符
+            // 使用 || null 確保如果圖片找不到時不會出現 undefined 導致 Firebase 報錯
+            const hasNameChanged = dbFood.name !== latestDef.name;
+            const hasImageChanged = dbFood.image !== (latestDef.image || null);
+
+            if (hasNameChanged || hasImageChanged) {
               needsUpdate = true;
-              return { ...dbFood, image: latestDef.image };
+              return {
+                ...dbFood,
+                name: latestDef.name,
+                image: latestDef.image || null
+              };
             }
           }
           return dbFood;
         });
 
-        // 檢查是否有需要刪除的奶類或新增的白麵 (延續之前的邏輯)
+        // 檢查是否有需要移除的舊食材 (母乳/配方奶)
         let finalData = updatedData.filter(f => f.name !== '母乳' && f.name !== '配方奶');
-        const hasNoodles = finalData.some(f => f.name === '白麵');
-        if (!hasNoodles) {
-          const noodleObj = INITIAL_FOODS.find(f => f.name === '白麵');
-          if (noodleObj) {
-            finalData.push(noodleObj);
+
+        // 檢查是否有遺漏的新食材 (例如白麵)
+        INITIAL_FOODS.forEach(initFood => {
+          const exists = finalData.some(f => f.id === initFood.id);
+          if (!exists) {
+            finalData.push(initFood);
             needsUpdate = true;
           }
-        }
+        });
 
+        // 如果偵測到任何名稱、圖片或結構變更，自動寫回 Firebase
         if (needsUpdate || finalData.length !== data.length) {
-          console.log("偵測到配置變更，正在同步 Firebase 資料庫...");
+          console.log("偵測到配置或名稱變更 (如：章魚)，正在同步 Firebase 資料庫...");
           set(foodRef, finalData);
         }
 
         setFoods(finalData);
       } else {
+        // 資料庫為空時的初始化
         set(foodRef, INITIAL_FOODS);
       }
       setLoading(false);
@@ -83,6 +94,7 @@ export default function App() {
 
   return (
     <div className="flex min-h-screen bg-[#FFFDF5] font-mono">
+      {/* 側邊導覽列 */}
       <nav className="w-28 border-r-8 border-slate-800 bg-white flex flex-col items-center py-8 gap-6 sticky top-0 h-screen">
         <div className="mb-4 p-2 bg-slate-800 text-white border-4 border-slate-800 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)]">
           <Baby size={32} strokeWidth={2.5} />
@@ -99,6 +111,8 @@ export default function App() {
           </button>
         </div>
       </nav>
+
+      {/* 內容區 */}
       <main className="flex-1 p-8 overflow-y-auto">
         {activePage === 'home' && <HomePage foods={foods} setFoods={updateFoods} />}
         {activePage === 'record' && <RecordPage foods={foods} setFoods={updateFoods} />}
